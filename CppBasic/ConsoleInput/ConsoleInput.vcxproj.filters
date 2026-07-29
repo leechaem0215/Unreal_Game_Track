@@ -20,6 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="26.07.27_수업.md" />
+    <None Include="..\ConsoleIO\26.07.28_수업.md" />
   </ItemGroup>
 </Project>
