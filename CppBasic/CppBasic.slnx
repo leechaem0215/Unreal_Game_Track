@@ -2,8 +2,14 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
+  <Folder Name="/솔루션 항목/">
+    <File Path="26.07.29_수업.md" />
+  </Folder>
+  <Project Path="Array/Array.vcxproj" Id="bad61e95-f4ac-491a-9c2c-0399cdef0355" />
   <Project Path="BuildProcess/BuildProcess.vcxproj" Id="89951dcc-3e6d-409e-938c-cd29e252405e" />
+  <Project Path="Class/Class.vcxproj" Id="2205725e-9686-49f5-87c0-fe3c5c9e803d" />
   <Project Path="ConsoleInput/ConsoleInput.vcxproj" Id="b68f66a9-6473-4df4-8a1c-61bd69063e91" />
   <Project Path="ConsoleIO/ConsoleIO.vcxproj" Id="2171d648-dd7e-49f7-bdf0-c1f9138a2807" />
   <Project Path="Pointer/Pointer.vcxproj" Id="348e9832-8fc7-4b0d-98e9-d619b9aaf367" />
+  <Project Path="String/String.vcxproj" Id="a46e760c-5787-445f-86a6-a79aef89c82d" />
 </Solution>

@@ -10,8 +10,21 @@ void Release(int** t) // 포인터 받음 (int*& t) : 포인터의 레퍼런스?
 	}
 }
 
+// 두 변수의 값을 서로 교환하는 함수
+void Swap(int* a, int* b) { // const int*, const a 많이 물어본다. // const 는 최대한 많이 붙이는게 좋음
+	// 어떤 의미인지 확인해두기 const
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 int main()
 {
+	// 두 수를 교환
+	int numberA = 10;
+	int numberB = 20;
+	Swap(&numberA, &numberB);
+
 	int var = 8;
 	int* ptr = &var; // 포인터가 가리키는 공간이 int
 	// 포인터에 값 넣으면 안됌
@@ -28,7 +41,7 @@ int main()
 	int* buffer = new int[length];
 	int** bufferPtr = &buffer; // 포인터가 가리키는 공간이 int 타입의 포인터
 	// 포인터가 한번이면 주소 한번 타면 되는데 더블은 두번 타야 주소나온다.
-	// new를 했으면 delete를 해주어야함.
+	// new를 했으면 delete를 해주어야함.                                                                                                 
 	// *buffer = 0;
 	memset(buffer, 0, sizeof(int) * length); // 공간 초기화, 초기화 하지 않으면 아무런 값 들어감.
 
