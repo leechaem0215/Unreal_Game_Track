@@ -18,9 +18,60 @@ void Swap(int* a, int* b) { // const int*, const a 많이 물어본다. // const
 	*b = temp;
 }
 
+void Changer(int* t)
+{
+	*t = 10;
+}
+
+void ChangerArray(int* t)
+{
+	*t = 10;
+}
+
 int main()
 {
-	// 두 수를 교환
+	int num = 8;
+	int* a = &num;
+	Changer(a);
+
+	const int length = 100;
+	int* buffer = new int[length];
+
+	ChangerArray(buffer);
+
+	int** bufferPtr = &buffer;
+
+	int var = 8;
+	int* ptr = &var; // 포인터가 가리키는 공간이 int
+	// 포인터에 값 넣으면 안됌
+
+	int* testPtr = new int;
+	Release(&testPtr);
+
+	// 동적 할당.
+	// 포인터가 가리키는 공간이 int 타입의 포인터
+	// 포인터가 한번이면 주소 한번 타면 되는데 더블은 두번 타야 주소나온다.
+	// new를 했으면 delete를 해주어야함.                                                                                                 
+	// *buffer = 0;
+	memset(buffer, 0, sizeof(int) * length); // 공간 초기화, 초기화 하지 않으면 아무런 값 들어감.
+
+	delete[] buffer; // 배열삭제로
+
+	std::cin.get();
+}
+
+
+/*
+int 타입으로 포인터 잡아서 B
+new int 할당 했는데 둘이 메모리 적재되는 공간이 다름
+
+왼쪽은 stack, 오른쪽은 Heap
+왼쪽 포인터, 오른쪽은 Heap
+*/
+
+
+/*
+// 두 수를 교환
 	int numberA = 10;
 	int numberB = 20;
 	Swap(&numberA, &numberB);
@@ -35,24 +86,17 @@ int main()
 	//testPtr = nullptr;
 
 	////////////////////////////////
-	
+
 	// 동적 할당.
 	const int length = 100;
 	int* buffer = new int[length];
 	int** bufferPtr = &buffer; // 포인터가 가리키는 공간이 int 타입의 포인터
 	// 포인터가 한번이면 주소 한번 타면 되는데 더블은 두번 타야 주소나온다.
-	// new를 했으면 delete를 해주어야함.                                                                                                 
+	// new를 했으면 delete를 해주어야함.
 	// *buffer = 0;
 	memset(buffer, 0, sizeof(int) * length); // 공간 초기화, 초기화 하지 않으면 아무런 값 들어감.
 
 	delete[] buffer; // 배열삭제로
 
 	std::cin.get();
-}
-/*
-int 타입으로 포인터 잡아서 B
-new int 할당 했는데 둘이 메모리 적재되는 공간이 다름
-
-왼쪽은 stack, 오른쪽은 Heap
-왼쪽 포인터, 오른쪽은 Heap
 */
