@@ -1,14 +1,26 @@
 ﻿#include "Engine.h"
+#include <Level/Level.h>
+
 #include <iostream>
 #include <Windows.h>
+#include <cassert>
 
 namespace Craft 
 {
+	// 전역 변수 초기화
+	Engine* Engine::instance = nullptr;
+
 	Engine::Engine()
 	{
+		// instance 초기화
+		assert(!instance && "anoter instance is not null");
+
+		instance = this;
 	}
+
 	Engine::~Engine()
 	{
+		instance = nullptr;
 	}
 	void Engine::Run()
 	{
@@ -54,6 +66,9 @@ namespace Craft
 			float deltaTime = static_cast<float>(current - previous)
 				/ static_cast<float>(frequency.QuadPart);
 			
+			// 고정 프레임 처리.
+			// 프레임 사이에 걸린 시간이 목표 시간보다 더 많이 지났으면
+			// 프레임 처리.
 			if (deltaTime >= oneFeametime) {
 
 				// 게임 이벤트 함수 호출
@@ -67,6 +82,29 @@ namespace Craft
 
 				// 화면 그리기
 				Draw();
+
+				// 이 위까지 호출이 완료되면 프레임 처리 완료됨
+
+				// 레벨 전환 처리
+				if (nextLevel)
+				{
+					// 기존 레벨 정리
+					if (mainLevel)
+					{
+						mainLevel.reset();
+					}
+					// 추가 요청된 레벨을 메인 레벨로 설정
+					mainLevel = nextLevel;
+
+					// 포인터 정리
+					nextLevel.reset(); // reset : 포인터가 가리키는곳 null 해주는거
+				}
+				
+				// 추가/제거 요청된 액터 정리
+				if (mainLevel)
+				{
+					mainLevel->ProcessAddAndDestoryActors();
+				}
 
 				// 다음 프레임을 위해 입력상태 저장
 				SavePreviousInputStates();
@@ -84,24 +122,50 @@ namespace Craft
 		isQuit = true;
 	
 	}
+
+	Engine& Engine::Get()
+	{
+		// 검증 - 어서트
+		// 무조건 (필수로) 통화해야하는 조건이 있을 때 사용
+		// 디버그 모드에서만 동작
+		assert(instance && "instance is null");
+		
+		return *instance;
+	}
 	void Engine::ProcessInput()
 	{
 	}
 	void Engine::OnInitialized()
 	{
+		// 레벨 초기화 처리
+		// 예외처리
+		if (!mainLevel || mainLevel->HasInitialized()) 
+		{
+			return;
+		}
+		// 초기화 이벤트 호출
+		mainLevel->OnInitialized();
 	}
+
 	void Engine::BeginPlay()
 	{
+		if (!mainLevel) 
+		{
+			return;
+		}
+
+		// 레벨에 이벤트 전달
+		mainLevel->BeginPlay();
+
 	}
+
 	void Engine::Tick(float deltaTime)
 	{
-		// Todo : deltaTime 출력
-		std::cout
-			<< "Engine::Tick() - deltaTime: "
-			<< deltaTime
-			<< " | FPS: "  // 순간 프레임
-			<< (1.0f / deltaTime)
-			<< "\n";
+		if (!mainLevel) 
+		{
+			return;
+		}
+		mainLevel->Tick(deltaTime);
 	}
 	void Engine::Draw()
 	{
