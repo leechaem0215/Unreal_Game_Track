@@ -2,8 +2,22 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
+  <Folder Name="/솔루션 항목/">
+    <File Path="26.07.29_수업.md" />
+    <File Path="26.07.30_수업.md" />
+    <File Path="26.07.31_수업.md" />
+  </Folder>
+  <Project Path="Array/Array.vcxproj" Id="bad61e95-f4ac-491a-9c2c-0399cdef0355" />
   <Project Path="BuildProcess/BuildProcess.vcxproj" Id="89951dcc-3e6d-409e-938c-cd29e252405e" />
+  <Project Path="Class/Class.vcxproj" Id="2205725e-9686-49f5-87c0-fe3c5c9e803d" />
+  <Project Path="ClassInheritance/ClassInheritance.vcxproj" Id="c5908864-dbe5-467c-a838-127ca323a6db" />
   <Project Path="ConsoleInput/ConsoleInput.vcxproj" Id="b68f66a9-6473-4df4-8a1c-61bd69063e91" />
   <Project Path="ConsoleIO/ConsoleIO.vcxproj" Id="2171d648-dd7e-49f7-bdf0-c1f9138a2807" />
+  <Project Path="CopyConstructor/CopyConstructor.vcxproj" Id="542c13a6-6f43-47bc-a75e-43c6996d1147" />
+  <Project Path="ForwardDeclaration/ForwardDeclaration.vcxproj" Id="58f582c3-627b-4b74-8732-2efb70c9f2c6" />
+  <Project Path="OperatorOverloading/OperatorOverloading.vcxproj" Id="ca3f5cdd-c34d-402d-90bc-381350fa2793" />
   <Project Path="Pointer/Pointer.vcxproj" Id="348e9832-8fc7-4b0d-98e9-d619b9aaf367" />
+  <Project Path="Static/Static.vcxproj" Id="3be46448-0e90-4f27-b328-64d3c5e0bc2d" />
+  <Project Path="String/String.vcxproj" Id="a46e760c-5787-445f-86a6-a79aef89c82d" />
+  <Project Path="Virtual/Virtual.vcxproj" Id="7f8b01e4-ee8d-4926-a816-db477ce10f20" />
 </Solution>
