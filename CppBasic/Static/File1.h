@@ -1,5 +1,1 @@
-#pragma once
-class File1
-{
-};
-
+void FileOneFunction();

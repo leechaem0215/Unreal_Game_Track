@@ -1,12 +1,12 @@
-#include "File1.h"
+#include "File2.h"
 #include "Static.h"
 #include <iostream>
 
-void FileOneFunction()
+void FileTwoFunction()
 {
 	++variable;
 	std::cout
-		<< "File1, variable: "
+		<< "File2, variable: "
 		<< variable
 		<< "\n";
 }
