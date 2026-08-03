@@ -20,6 +20,7 @@ mono_crash.*
 *.lib
 *.dll
 [Ii]ncludes/
+[Ll]ib/
 
 # Build results
 [Dd]ebug/
