@@ -2,12 +2,14 @@
 
 #include <Core/Core.h>
 #include <memory> // 스마트 포인터 사용을 위해
+#include <Render/Renderer.h>
 
 // CraftEngine 프로젝트 안의 클래스는 Craft 네임 스페이스 사용.
 namespace Craft {
 	// 전방 선언
 	class Level;
 	class Input; // 포인터 관리하기 위해서
+	class Renderer; // 포인터로 다룰거임
 
 	// 메인 엔진 클래스
 	// 엔진 루프를 제공
@@ -87,6 +89,9 @@ namespace Craft {
 		
 		// 입력 시스템 변수
 		std::unique_ptr<Input> input;
+
+		// 렌더러
+		std::unique_ptr<Renderer> renderer;
 	};
 
 }

@@ -13,7 +13,7 @@ class Camera : public Actor
 
 class Player : public Actor
 {
-
+	 
 };
 
 int main() 
