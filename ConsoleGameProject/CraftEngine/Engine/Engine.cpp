@@ -1,5 +1,6 @@
 ﻿#include "Engine.h"
 #include <Level/Level.h>
+#include <Input/Input.h>
 
 #include <iostream>
 #include <Windows.h>
@@ -14,8 +15,13 @@ namespace Craft
 	{
 		// instance 초기화
 		assert(!instance && "anoter instance is not null");
-
 		instance = this;
+
+		// 입력 객체 생성
+		input = std::make_unique<Input>();
+
+		// 렌더러 객체 생성
+		renderer = std::make_unique<Renderer>();
 	}
 
 	Engine::~Engine()
@@ -134,6 +140,12 @@ namespace Craft
 	}
 	void Engine::ProcessInput()
 	{
+		assert(input && "input should not be null here");
+		if (!input)
+		{
+			return;
+		}
+		input->ProcessInput();
 	}
 	void Engine::OnInitialized()
 	{
@@ -169,9 +181,26 @@ namespace Craft
 	}
 	void Engine::Draw()
 	{
+		// 레벨이 먼저 그리기를 함
+		if ()
+		{
+
+		}
+		if (!renderer)
+		{
+			return;
+		}
+
+		renderer->Draw();
 	}
 	void Engine::SavePreviousInputStates()
 	{
+		assert(input && "input should not null here");
+		if (!input)
+		{
+			return;
+		}
+		input->SavePrevioutStates();
 	}
 	void Engine::Shutdown()
 	{

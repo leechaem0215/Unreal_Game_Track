@@ -1,10 +1,15 @@
 ﻿#include "Actor.h"
 #include <Engine/Engine.h>
-
+#include <Render/Renderer.h>
 namespace Craft
 {
-	Actor::Actor()
+	Actor::Actor(
+		const std::string& image,
+		const Vector2& position,
+		Color color)
+		: image(image), position(position), color(color), width(static_cast<int>(image.length())) // 초기값 지정
 	{
+
 	}
 	Actor::~Actor()
 	{
@@ -20,6 +25,12 @@ namespace Craft
 	}
 	void Actor::Draw()
 	{
+		// 비활성 상태이면 종료
+		if (!IsActive()) {
+			return;
+		}
+		// 렌더러에 필요한 데이터 제출
+		Renderer::Get().Submit(image, position, color, sortingOrder);
 	}
 	void Actor::Destory()
 	{
@@ -30,5 +41,14 @@ namespace Craft
 	{
 		// 엔진 종료 요청
 		Engine::Get().Quit();
+	}
+	void Actor::SetPosition(const Vector2& newPosition)
+	{
+		// 변경하려는 위치 값이 기존 값과 동일하면 종료
+		if (position == newPosition)
+		{
+			return;
+		}
+		position = newPosition;
 	}
 }

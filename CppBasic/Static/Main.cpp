@@ -7,8 +7,6 @@ void Increment()
 	std::cout << "Count: " << count << "\n";
 }
 
-int personCount = 0;
-
 class Person
 {
 public:
@@ -17,14 +15,30 @@ public:
 		++personCount;
 		std::cout << personCount << "번째 Person 객체 생성\n";
 	}
+
 	~Person()
 	{
 		--personCount;
 	}
+
+private:
+	static int personCount;
 };
 
-int mani() 
+// static 변수는 별도로 초기화 해야함.
+int Person::personCount = 0;
+
+int main()
 {
+	//FileOneFunction();
+	//FileTwoFunction();
+
+	//Increment();
+	//Increment();
+	//Increment();
+
+	//
 	Person p1;
 	Person p2;
+	Person p3;
 }

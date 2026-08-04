@@ -9,5 +9,7 @@ int main()
 
 	Point p3 = p1 + p2;
 
+	//Point p3 = p1.operator+(p2); 
+
 	p3.Print();
 }

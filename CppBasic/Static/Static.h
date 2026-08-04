@@ -1,4 +1,4 @@
 #pragma once
 
-int variable = 0;
+static int variable = 0;
 

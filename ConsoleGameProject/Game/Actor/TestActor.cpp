@@ -1,4 +1,5 @@
 ﻿#include "TestActor.h"
+#include <Input/Input.h>
 #include <iostream>
 #include <Windows.h>
 
@@ -8,16 +9,33 @@ void TestActor::Tick(float deltaTime)
 	// 상위 로직 호출
 	Actor::Tick(deltaTime);
 	
-	// Todo: ESC 키 종료 (임시처리)
+	// ESC 키 종료
 
-	if ((GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0)
+	if (Input::Get().GetKeyDown(VK_ESCAPE))
 	{
 		// 엔진 종료
 		QuitGame();
 	}
+	if (Input::Get().GetKeyDown('A'))
+	{
+		std::cout << "A key is down\n";
+	}
+
+	if (Input::Get().GetKey('A'))
+	{
+		std::cout << "A key is holding down\n";
+	}
+
+	if (Input::Get().GetKeyUp('A'))
+	{
+		std::cout << "A key is up\n";
+	}
+
+	/*
 	std::cout 
 		<< "TestActor::Tick() - deltaTime: " 
 		<< deltaTime
 		<< " | FPS: " << (1.0f / deltaTime)
 		<< "\n";
+		*/
 }
