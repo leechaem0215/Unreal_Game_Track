@@ -2,7 +2,6 @@
 
 #include <Core/Core.h>
 #include <memory> // 스마트 포인터 사용을 위해
-#include <Render/Renderer.h>
 
 // CraftEngine 프로젝트 안의 클래스는 Craft 네임 스페이스 사용.
 namespace Craft {
@@ -16,11 +15,17 @@ namespace Craft {
 	// 게임 엔진의 핵심 기능 제공.
 	class CRAFT_API Engine
 	{
-		// 엔진 설정 (데이터)
+		// 엔진 설정 (데이터).
 		struct Setting
 		{
-			// 목표 프레임 수 (초당 프레임)
-			float framerate = 120.0f;
+			// 목표 프레임 수 (초당 프레임).
+			float framerate = 0.0f;
+
+			// 사용할 콘솔 화면 너비.
+			int width = 0;
+
+			// 사용할 콘솔 화면 높이.
+			int height = 0;
 		};
 	public:
 		Engine();
@@ -46,6 +51,11 @@ namespace Craft {
 		// 전역 접근 함수
 		static Engine& Get();
 
+		// 화면 너비 필요할 때를 위해서
+		// Getter, 화면 제어
+		inline int GetWidth() const { return setting.width; }
+		inline int GetHeight() const { return setting.height; }
+
 	protected:
 		// 입력 처리 함수 (입력 폴링)
 		void ProcessInput();
@@ -70,6 +80,9 @@ namespace Craft {
 
 		// 엔진 종료 시 정리가 필요할 때 사용할 함수
 		void Shutdown();
+
+		// 엔진 설정 로드 함수.
+		void LoadEngineSetting();
 
 	protected:
 		// 엔진 종료 요청 여부 플래그.

@@ -70,6 +70,10 @@
     <PostBuildEvent>
       <Command>xcopy $(OutDir)\*.lib ..\Lib\ /e /y /i</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy *.h ..\Includes\ /e /y /i
+xcopy ..\Config\* $(OutDir)..\Config\ /e /y /i</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -92,6 +96,10 @@
     <PostBuildEvent>
       <Command>xcopy $(OutDir)\*.lib ..\Lib\ /e /y /i</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy *.h ..\Includes\ /e /y /i
+xcopy ..\Config\* $(OutDir)..\Config\ /e /y /i</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Actor.cpp" />
@@ -100,6 +108,7 @@
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="Render\ScreenBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="2026.08.03_수업내용.md" />
@@ -114,6 +123,7 @@
     <ClInclude Include="Math\Color.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="Render\ScreenBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
