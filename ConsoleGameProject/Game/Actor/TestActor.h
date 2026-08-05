@@ -21,5 +21,5 @@ if (Input::Get().GetKey(VK_UP) && position.y > 0) {
 	position.y -= 1;
 }
 if (Input::Get().GetKey(VK_DOWN) && position.y < 24) { // 콘솔은 세로가 더 길다
-	position.y -= 1;
+	position.y += 1; // 콘솔좌표계는 내려갈때 y가 + 이다.
 }
