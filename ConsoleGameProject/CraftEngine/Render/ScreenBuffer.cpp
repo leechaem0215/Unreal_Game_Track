@@ -76,7 +76,7 @@ namespace Craft
 		// charInfo 는 2차원 배열 (1차원 배열에 2차원 배열 정보를 기록)
 
 		// 설정할 글자 영역
-		SMALL_RECT rect = { 0, 0, static_cast<short>(size.x), static_cast<short>(size.y) }; // left, top, right, bottom
+		SMALL_RECT rect = { 0, 0, static_cast<short>(size.x - 1), static_cast<short>(size.y - 1) }; // left, top, right, bottom
 
 		// 콘솔에  CHAR_INFO 타입으로 글자 쓰는 함수
 		BOOL result = WriteConsoleOutputA(

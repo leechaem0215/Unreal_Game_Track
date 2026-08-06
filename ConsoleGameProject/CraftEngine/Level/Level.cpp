@@ -67,7 +67,7 @@ namespace Craft
 
 			if (actor->HasExpired())
 			{
-				actorList.erase(iterator);
+				iterator = actorList.erase(iterator);
 				continue;
 			}
 			// 다음 순번 처리하기 위해 이터레이터(반복자, 포인터)
