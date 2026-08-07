@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <Core/Core.h>
 #include <Actor/Actor.h>
+#include <Core/CraftObject.h>
 #include <memory> // std::unique_ptr / std::shared_ptr 사용
 #include <vector> // std::vector 동적 배열
 
@@ -11,8 +12,12 @@ namespace Craft
 	// : shared_from_this() / weak_from_this() 사용하기 위해.
 	// : shared_from_this() - this 포인터를 shared_ptr로 변환.
 	// : weak_from_this() - this 포인터를 weak_ptr로 변환.
-	class CRAFT_API Level : public std::enable_shared_from_this<Level>
+	class CRAFT_API Level :
+		public CraftObject,
+		public std::enable_shared_from_this<Level>
 	{
+	// 커스텀 타입 설정 
+	TYPE_DECLARATIONS(Level, CraftObject)
 	// friend 선언, 접근 가능하도록 예외 두는것
 	friend class Engine; 
 

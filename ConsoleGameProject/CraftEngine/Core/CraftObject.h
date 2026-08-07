@@ -66,6 +66,18 @@ protected:                                  \
 	{																\
 		static int runTimeTypeId = 0;								\
 		return reinterpret_cast<size_t>(&runTimeTypeId);			\
-	}
-
-	// 타입의 타입ID 클래스,
+	}                                                               \
+public:																\
+	static size_t TypeId()											\
+{																\
+return Type::TypeIdClass();									\
+}																\
+virtual size_t GetType() const override							\
+{																\
+return Type::TypeIdClass();									\
+}																\
+virtual bool Is(size_t id) const override						\
+{																\
+/* 현재 계층에서 일단 비교하고, 타입이 다르면 부모 계층까지 검색 */ \
+return (id == TypeIdClass()) ? true : ParentType::Is(id);	\
+}

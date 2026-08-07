@@ -256,13 +256,13 @@ namespace Craft
 
 			// 키 값을 비교해서 값 설정
 			if (strcmp(key, "framerate") == 0) {
-				sscanf_s(token, "framerate=%f", &setting.framerate);
+				sscanf_s(token, "framerate = %f", &setting.framerate);
 			}
 			else if (strcmp(key, "width") == 0) {
-				sscanf_s(token, "width=%d", &setting.width);
+				sscanf_s(token, "width = %d", &setting.width);
 			}
 			else if (strcmp(key, "height") == 0) {
-				sscanf_s(token, "height=%d", &setting.height);
+				sscanf_s(token, "height = %d", &setting.height);
 			}
 
 			// 나머지 문자열 자르기 (개행 문자 기준으로)

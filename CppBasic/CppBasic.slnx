@@ -17,11 +17,13 @@
   <Project Path="CopyConstructor/CopyConstructor.vcxproj" Id="542c13a6-6f43-47bc-a75e-43c6996d1147" />
   <Project Path="CustomRTTI/CustomRTTI.vcxproj" Id="25bedb64-1258-4310-9d73-10cce7b44393" />
   <Project Path="ForwardDeclaration/ForwardDeclaration.vcxproj" Id="58f582c3-627b-4b74-8732-2efb70c9f2c6" />
+  <Project Path="FunctionPointer/FunctionPointer.vcxproj" Id="3c17337f-d199-4e55-ba72-ce8f5175ed0b" />
   <Project Path="OperatorOverloading/OperatorOverloading.vcxproj" Id="ca3f5cdd-c34d-402d-90bc-381350fa2793" />
   <Project Path="Pointer/Pointer.vcxproj" Id="348e9832-8fc7-4b0d-98e9-d619b9aaf367" />
   <Project Path="RTTI/RTTI.vcxproj" Id="fb599585-0c7b-4bed-b45e-b8dc96ec5001" />
   <Project Path="Static/Static.vcxproj" Id="3be46448-0e90-4f27-b328-64d3c5e0bc2d" />
   <Project Path="String/String.vcxproj" Id="a46e760c-5787-445f-86a6-a79aef89c82d" />
   <Project Path="Template/Template.vcxproj" Id="55efdc4a-6d49-494f-8553-9f10b3014343" />
+  <Project Path="ValueCategory/ValueCategory.vcxproj" Id="ef9f8a5a-c295-4d13-884d-bf8f22742f09" />
   <Project Path="Virtual/Virtual.vcxproj" Id="7f8b01e4-ee8d-4926-a816-db477ce10f20" />
 </Solution>
