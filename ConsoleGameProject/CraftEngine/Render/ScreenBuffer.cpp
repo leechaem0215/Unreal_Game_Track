@@ -37,7 +37,7 @@ namespace Craft
 
 		// 직접 만든 콘솔의 커서 끄기
 		CONSOLE_CURSOR_INFO info;
-		GetConsoleCursorInfo(buffer, &info);
+		result = GetConsoleCursorInfo(buffer, &info);
 		assert(result == TRUE);
 
 		// 커서 안보이게 설정

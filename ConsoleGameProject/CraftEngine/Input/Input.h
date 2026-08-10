@@ -37,7 +37,7 @@ namespace Craft
 		void ProcessInput();
 
 		// 이전 프레임의 키 눌림 상태를 저장하는 함수
-		void SavePrevioutStates();
+		void SavePreviousStates();
 
 	private:
 		// 가상 키의 수 (처리할 키의 수)

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <Level/Level.h>
+#include <string>
 
 // 소코반 게임 레벨 클래스
 // 게임 클리어 등 게임 규칙 및 전반을 관리
@@ -25,6 +26,9 @@ private:
 	// 맵 로드 함수
 	void LoadMap(const std::string& filename);
 
+private:
+	// 점수 확인 함수
+	bool CheckGameClear();
 private:
 	// 목표 점수 - 클리어 조건
 	// 타겟위치에 올라갔을 때 점수 증가

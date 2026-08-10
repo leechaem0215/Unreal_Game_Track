@@ -1,4 +1,4 @@
-#include "Input.h"
+﻿#include "Input.h"
 #include <cassert>
 #include <Windows.h>
 
@@ -47,7 +47,7 @@ namespace Craft
 		}
 	}
 
-	void Craft::Input::SavePrevioutStates()
+	void Craft::Input::SavePreviousStates()
 	{
 		// 이전 프레임 입력 값 저장
 		for (KeyState& state : keyStates)

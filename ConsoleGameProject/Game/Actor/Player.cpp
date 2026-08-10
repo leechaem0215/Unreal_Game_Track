@@ -1,6 +1,7 @@
 ﻿#include "Player.h"
 #include <Input/Input.h>
 #include <Level/GameLevel.h>
+#include <Game/Game.h>
 
 using namespace Craft;
 Player::Player(const Craft::Vector2& position)
@@ -9,7 +10,6 @@ Player::Player(const Craft::Vector2& position)
 	// 우선순위 설정
 	// 액터 중에서 가장 높은 값
 	sortingOrder = 10;
-
 }
 
 void Player::Tick(float deltaTime)
@@ -22,7 +22,13 @@ void Player::Tick(float deltaTime)
 	if (Input::Get().GetKeyDown(VK_ESCAPE))
 	{
 		// 종료 처리
-		QuitGame();
+		//QuitGame();
+		
+		// 메뉴 토글
+		// 토글은 게임이 제공한다.
+		Game& game = dynamic_cast<Game&>(Engine::Get());
+		game.ToggleMenu();
+
 		return;
 	}
 

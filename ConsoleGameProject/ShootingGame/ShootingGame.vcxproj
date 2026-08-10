@@ -13,8 +13,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{CB292ECB-C591-4A20-898A-EE6B09DDDF81}</ProjectGuid>
-    <RootNamespace>Game</RootNamespace>
+    <ProjectGuid>{fa23939a-8e48-4d27-a253-405231dd8884}</ProjectGuid>
+    <RootNamespace>ShootingGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -63,15 +63,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\Lib\;</AdditionalLibraryDirectories>
       <AdditionalDependencies>CraftEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Lib\;</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
-    <PreBuildEvent>
-      <Command>xcopy ..\Assets\* $(OutDir)..\Assets\ /e /y /i</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -87,40 +84,31 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\Lib\;</AdditionalLibraryDirectories>
       <AdditionalDependencies>CraftEngine.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Lib\;</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
-    <PreBuildEvent>
-      <Command>xcopy ..\Assets\* $(OutDir)..\Assets\ /e /y /i</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor\Box.cpp" />
-    <ClCompile Include="Actor\Ground.cpp" />
+    <ClCompile Include="Actor\Enemy.cpp" />
+    <ClCompile Include="Actor\EnemySpawner.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
-    <ClCompile Include="Actor\Target.cpp" />
-    <ClCompile Include="Actor\TestActor.cpp" />
-    <ClCompile Include="Actor\Wall.cpp" />
-    <ClCompile Include="Game\Game.cpp" />
+    <ClCompile Include="Actor\PlayerBullet.cpp" />
+    <ClCompile Include="Actor\EnemyBullet.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
-    <ClCompile Include="Level\MenuLevel.cpp" />
-    <ClCompile Include="Level\TestLevel.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Util\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor\Box.h" />
-    <ClInclude Include="Actor\Ground.h" />
+    <ClInclude Include="Actor\Enemy.h" />
+    <ClInclude Include="Actor\EnemySpawner.h" />
     <ClInclude Include="Actor\Player.h" />
-    <ClInclude Include="Actor\Target.h" />
-    <ClInclude Include="Actor\TestActor.h" />
-    <ClInclude Include="Actor\Wall.h" />
-    <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Actor\PlayerBullet.h" />
+    <ClInclude Include="Actor\EnemyBullet.h" />
     <ClInclude Include="Level\GameLevel.h" />
-    <ClInclude Include="Level\MenuLevel.h" />
-    <ClInclude Include="Level\TestLevel.h" />
+    <ClInclude Include="Util\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

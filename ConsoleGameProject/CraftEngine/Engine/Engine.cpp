@@ -52,7 +52,7 @@ namespace Craft
 		int64_t previous = current;
 
 		// 고정 프레임으로 만들기 위한 값.
-		float oneFeametime = 1.0f / setting.framerate;
+		float oneFrameTime= 1.0f / setting.framerate;
 
 
 		// 엔진 루프
@@ -81,7 +81,7 @@ namespace Craft
 			// 고정 프레임 처리.
 			// 프레임 사이에 걸린 시간이 목표 시간보다 더 많이 지났으면
 			// 프레임 처리.
-			if (deltaTime >= oneFeametime) {
+			if (deltaTime >= oneFrameTime) {
 
 				// 게임 이벤트 함수 호출
 				OnInitialized();
@@ -116,6 +116,7 @@ namespace Craft
 				if (mainLevel)
 				{
 					mainLevel->ProcessAddAndDestoryActors();
+					//mainLevel->ProcessAddAndDestoryActors();
 				}
 
 				// 다음 프레임을 위해 입력상태 저장
@@ -210,7 +211,7 @@ namespace Craft
 		{
 			return;
 		}
-		input->SavePrevioutStates();
+		input->SavePreviousStates();
 	}
 	void Engine::Shutdown()
 	{
