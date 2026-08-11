@@ -20,7 +20,7 @@ void EnemyBullet::Tick(float deltaTime)
 
 	// y 로 이동해서 화면 아래 끝지점 도달하면 제거
 	// 좌표 검사.
-	if (yPosition >= Engine::Get().GetHeight())
+	if (yPosition >= Engine::Get().GetHeight() -1) // 아래쪽끝에 도달했는지 봄 -1 넣어야함
 	{
 		Destroy();
 		return;

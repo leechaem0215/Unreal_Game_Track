@@ -3,6 +3,8 @@
 #include <Engine/Engine.h>
 #include <Actor/EnemyBullet.h>
 #include <Level/Level.h>
+#include <Actor/PlayerBullet.h>
+#include <Actor/DestroyEffect.h>
 
 using namespace Craft;
 Enemy::Enemy(const std::string& image, int yPosition)
@@ -43,13 +45,13 @@ void Enemy::Tick(float deltaTime)
 	// 화면에 벗어나면 안됌 -> 좌표검사
 	if (xPosition + width < 0) // 위치기준 오른쪽, 완전히 벗어나면 
 	{
-		Destory(); // 왼쪽으로 벗어나는 경우
+		Destroy(); // 왼쪽으로 벗어나는 경우
 		return;
 	}
 
 	if (xPosition > Engine::Get().GetWidth() -1)
 	{ // 위치값 왼쪽 기준, 검사하려면 오른쪽 위치 봐야해서 너비 감안해서 본다.
-		Destory(); // 오른쪽으로 벗어나는 경우
+		Destroy(); // 오른쪽으로 벗어나는 경우
 		return;
 	}
 
@@ -88,4 +90,26 @@ void Enemy::Tick(float deltaTime)
 	
 	// 탄약이 발사되면 탄약마다 속도가 다를것이다.
 
+}
+
+void Enemy::OnCollision(const std::shared_ptr<Actor>& other) // other 가 플레이어 탄약이면 사라지도록 할것임
+{
+	super::OnCollision(other);
+
+	// 충돌한 다른 액터가 플레이어 탄약이면 삭제
+	// 커스텀 타입 활용
+	if (other->IsTypeOf<PlayerBullet>()) // 매크로가 잘 지정되어 있어야함.
+	{
+		// 플레이어 탄약 제거
+		other->Destroy();
+
+		// 적 액터 제거
+		Destroy();
+
+		// 적 파괴 이펙트 생성
+		if (GetOwner())
+		{
+			GetOwner()->SpawnActor<DestroyEffect>(GetPosition());
+		}
+	}
 }

@@ -56,7 +56,7 @@ namespace Craft
 			actor->Draw();
 		}
 	}
-	void Level::ProcessAddAndDestoryActors()
+	void Level::ProcessAddAndDestroyActors()
 	{
 		// 액터 제거 처리
 		// 이터레이터 기반 루프

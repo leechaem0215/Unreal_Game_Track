@@ -19,7 +19,7 @@ void PlayerBullet::Tick(float deltaTime)
 	if (yPosition < 0.0f) 
 	{
 		// 삭제 처리
-		Destory();
+		Destroy();
 		return;
 	}
 

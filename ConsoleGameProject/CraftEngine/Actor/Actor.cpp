@@ -36,7 +36,7 @@ namespace Craft
 	{
 
 	}
-	void Actor::Destory()
+	void Actor::Destroy()
 	{
 		// 삭제 예약 설정
 		hasExpired = true;
