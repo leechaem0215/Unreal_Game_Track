@@ -37,7 +37,7 @@ namespace Craft
 				// 글자 항목 초기화
 				CHAR_INFO& info = charInfoArray[index];
 				// 빈문자 설정 - 기존의 설정된 값 지우기
-				info.Char.AsciiChar = ' ';
+				info.Char.UnicodeChar = L' ';
 				// 색상 표기 안함
 				info.Attributes = 0;
 
@@ -99,7 +99,7 @@ namespace Craft
 		//SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 	}
 
-	void Renderer::Submit(const std::string& image, const Vector2& position, Color color, int sortingOrder)
+	void Renderer::Submit(const std::wstring& image, const Vector2& position, Color color, int sortingOrder)
 	{
 		// 렌더 명령 생성 및 값 설정
 		RenderCommand command;
@@ -141,6 +141,74 @@ namespace Craft
 		GetCurrentBuffer()->Clear();
 	}
 
+	void Renderer::DrawRenderQueue()
+	{
+		for (const RenderCommand& command : renderQueue)
+		{
+			if (command.image.empty())
+			{
+				continue;
+			}
+
+			int drawX = command.position.x;
+			int drawY = command.position.y;
+
+			for (const wchar_t character : command.image)
+			{
+				// 줄바꿈 문자
+				if (character == L'\n')
+				{
+					drawX = command.position.x;
+					++drawY;
+					continue;
+				}
+
+				// Windows 형식의 \r\n에서 \r은 무시
+				if (character == L'\r')
+				{
+					continue;
+				}
+
+				// 화면 안에 들어오는 문자만 그리기
+				if (drawX >= 0 &&
+					drawX < screenSize.x &&
+					drawY >= 0 &&
+					drawY < screenSize.y)
+				{
+					const int index =
+						(drawY * screenSize.x) + drawX;
+
+					// 기존 문자의 우선순위가 더 높으면 그리지 않음
+					if (frame->sortingOrderArray[index]
+						<= command.sortingOrder)
+					{
+						frame->charInfoArray[index]
+							.Char.UnicodeChar = character;
+
+						frame->charInfoArray[index]
+							.Attributes =
+							static_cast<WORD>(command.color);
+
+						frame->sortingOrderArray[index] =
+							command.sortingOrder;
+					}
+				}
+
+				++drawX;
+			}
+
+		}
+
+		GetCurrentBuffer()->Draw(frame->charInfoArray.get());
+
+		renderQueue.clear();
+
+		SetConsoleTextAttribute(
+			GetCurrentBuffer()->GetBuffer(),
+			static_cast<WORD>(Color::White)
+		);
+	}
+	/*
 	void Renderer::DrawRenderQueue()
 	{
 		// 렌더 큐를 순회하면서 그리기 명령 실행
@@ -195,7 +263,7 @@ namespace Craft
 					continue;
 				}
 				// 2차원 배열에 글자, 속성 설정
-				frame->charInfoArray[index].Char.AsciiChar = command.image[sourceIndex];
+				frame->charInfoArray[index].Char.UnicodeChar = command.image[sourceIndex];
 
 				// 글자 색상 값 설정
 				frame->charInfoArray[index].Attributes = static_cast<DWORD>(command.color);
@@ -216,7 +284,7 @@ namespace Craft
 			GetCurrentBuffer()->GetBuffer(),
 			static_cast<DWORD>(Color::White)
 		);
-	}
+	}*/
 
 	void Renderer::Present()
 	{

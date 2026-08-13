@@ -41,12 +41,34 @@ namespace Craft {
 		// std::is_base_if 하는일이 무엇인지
 		// std::enable_if_t 하는 일이 무엇인지
 		// typename = std::enable_if_t<std::is_base_of<Level, T>::value>>
-		template<typename T,
+		/*template<typename T,
 			typename = std::enable_if_t<std::is_base_of<Level, T>::value>> // T 타입이 Level의 하위 레벨이 아니면 생성안됌
 		void AddNewLevel()
 		{
 			// 추가 요청 레벨 객체 생성
 			nextLevel = std::make_shared<T>();
+		}*/
+
+		// 레벨 추가 요청 함수
+		template<
+			typename T,
+			typename... Args,
+			typename = std::enable_if_t<
+			std::is_base_of_v<Level, T>
+			>
+		>
+		std::shared_ptr<T> AddNewLevel(Args&&... args)
+		{
+			// 전달받은 인수로 새로운 레벨 생성
+			std::shared_ptr<T> newLevel =
+				std::make_shared<T>(
+					std::forward<Args>(args)...
+				);
+
+			// 다음 프레임에 전환할 레벨로 설정
+			nextLevel = newLevel;
+
+			return newLevel;
 		}
 
 		// 전역 접근 함수
@@ -87,6 +109,8 @@ namespace Craft {
 
 		// 엔진 설정 로드 함수.
 		void LoadEngineSetting();
+
+		void SetConsoleSize(int width, int height);
 
 	protected:
 		// 엔진 종료 요청 여부 플래그.

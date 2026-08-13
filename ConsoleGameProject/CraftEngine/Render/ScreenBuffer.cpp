@@ -79,7 +79,7 @@ namespace Craft
 		SMALL_RECT rect = { 0, 0, static_cast<short>(size.x - 1), static_cast<short>(size.y - 1) }; // left, top, right, bottom
 
 		// 콘솔에  CHAR_INFO 타입으로 글자 쓰는 함수
-		BOOL result = WriteConsoleOutputA(
+		BOOL result = WriteConsoleOutputW(
 			buffer,
 			charInfo, // charInfo = size
 			size,

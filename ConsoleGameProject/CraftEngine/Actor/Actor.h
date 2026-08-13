@@ -3,6 +3,7 @@
 #include <Math/Vector2.h>
 #include <Math/Color.h>
 #include <Core/CraftObject.h>
+#include <Render/TextSprite.h>
 #include <memory> //std::weak_ptr 사용을 위해
 #include <string>
 
@@ -18,7 +19,7 @@ namespace Craft
 		TYPE_DECLARATIONS(Actor, CraftObject)
 	public:
 		Actor(
-			const std::string& image = "",
+			const std::wstring& image = L"",
 			const Vector2& position = Vector2::Zero,
 			Color color = Color::White
 		);
@@ -58,16 +59,19 @@ namespace Craft
 		inline void SavePreviousState() { previousPosition = position; }
 
 		// 너비 반환 함수
-		inline int GetWidth() const { return width; }
+		inline int GetWidth() const { return textSprite.GetWidth(); }
+		inline int GetHeight() const { return textSprite.GetHeight(); }
 
-		// 액터의 이미지 설정 함수
-		inline void ChangeImage(const std::string& newImage)
+		// 이미지 반환
+		inline const std::wstring& GetImage() const
 		{
-			//이미지 길이 설정
-			width = static_cast<int>(newImage.length());
-			
-			// 새로운 글자 값 설정
-			image = newImage;
+			return textSprite.GetImage();
+		}
+
+		// 이미지 변경
+		inline void ChangeImage(const std::wstring& newImage)
+		{
+			textSprite.SetImage(newImage);
 		}
 
 	protected:
@@ -85,13 +89,15 @@ namespace Craft
 		std::weak_ptr<Level> owner;
 
 		// 화면에 그릴 글자
-		std::string image;
-		
+		//std::wstring image;
+		TextSprite textSprite;
+
 		// 글자 색상
 		Color color = Color::White;
 
 		// 글자 길이
-		int width = 0;
+		//int width = 0;
+		//int height = 0;
 
 		// 렌더링 순서
 		int sortingOrder = 0;

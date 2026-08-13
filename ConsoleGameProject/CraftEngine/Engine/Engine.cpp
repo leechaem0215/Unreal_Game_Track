@@ -21,6 +21,7 @@ namespace Craft
 
 		// 엔진 설정 로드
 		LoadEngineSetting();
+		SetConsoleSize(setting.width, setting.height);
 
 		// 입력 객체 생성
 		input = std::make_unique<Input>();
@@ -295,5 +296,54 @@ namespace Craft
 		// 파일 닫기
 		fclose(file);
 		file = nullptr;
+	}
+
+	void Engine::SetConsoleSize(int width, int height)
+	{
+		HANDLE console =
+			GetStdHandle(STD_OUTPUT_HANDLE);
+
+		// 콘솔 창 영역
+		SMALL_RECT windowRect = {};
+		windowRect.Left = 0;
+		windowRect.Top = 0;
+		windowRect.Right = width - 1;
+		windowRect.Bottom = height - 1;
+
+		// 콘솔 화면 버퍼
+		COORD bufferSize = {};
+		bufferSize.X = width;
+		bufferSize.Y = height;
+
+		// 현재 창이 더 클 수도 있으므로 우선 작게 축소
+		SMALL_RECT temporaryRect = {};
+		temporaryRect.Left = 0;
+		temporaryRect.Top = 0;
+		temporaryRect.Right = 1;
+		temporaryRect.Bottom = 1;
+
+		SetConsoleWindowInfo(
+			console,
+			TRUE,
+			&temporaryRect
+		);
+
+		// 버퍼 크기 설정
+		BOOL bufferResult =
+			SetConsoleScreenBufferSize(
+				console,
+				bufferSize
+			);
+
+		// 실제 창 크기 설정
+		BOOL windowResult =
+			SetConsoleWindowInfo(
+				console,
+				TRUE,
+				&windowRect
+			);
+
+		assert(bufferResult == TRUE);
+		assert(windowResult == TRUE);
 	}
 }

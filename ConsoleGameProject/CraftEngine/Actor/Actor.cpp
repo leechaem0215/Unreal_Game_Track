@@ -1,13 +1,14 @@
 ﻿#include "Actor.h"
 #include <Engine/Engine.h>
 #include <Render/Renderer.h>
+
 namespace Craft
 {
 	Actor::Actor(
-		const std::string& image,
+		const std::wstring& image,
 		const Vector2& position,
 		Color color)
-		: image(image), position(position), color(color), width(static_cast<int>(image.length())) // 초기값 지정
+		: textSprite(image), position(position), color(color) // 초기값 지정
 	{
 
 	}
@@ -30,7 +31,7 @@ namespace Craft
 			return;
 		}
 		// 렌더러에 필요한 데이터 제출
-		Renderer::Get().Submit(image, position, color, sortingOrder);
+		Renderer::Get().Submit(textSprite.GetImage(), position, color, sortingOrder);
 	}
 	void Actor::OnCollision(const std::shared_ptr<Actor>& other)
 	{
@@ -55,4 +56,5 @@ namespace Craft
 		}
 		position = newPosition;
 	}
+	
 }

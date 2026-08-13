@@ -43,7 +43,7 @@ namespace Craft
 		struct RenderCommand
 		{
 			// 화면에 그릴 문자값.
-			std::string image;
+			std::wstring image;
 			
 			// 위치
 			Vector2 position = Vector2::Zero;
@@ -60,7 +60,7 @@ namespace Craft
 
 		// 화면에 그릴 데이터를 제출(전달)하는 함수
 		void Submit(
-			const std::string& image,
+			const std::wstring& image,
 			const Vector2& position,
 			Color color = Color::White,
 			int sortingOrder = 0
