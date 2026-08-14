@@ -1,6 +1,8 @@
 ﻿#include "CollisionSystem.h"
 #include "Actor/Actor.h"
 
+#include <algorithm>
+
 namespace Craft
 {
 	void CollisionSystem::ProcessCollision(
@@ -112,14 +114,24 @@ namespace Craft
 			return false;
 		}
 
-		// 이전 프레임까지 고려한 y 충돌 영역 계산.
-		const int leftYMin = (leftCurrent.y < leftPrevious.y) ? leftCurrent.y : leftPrevious.y;
-		const int leftYMax = (leftCurrent.y > leftPrevious.y) ? leftCurrent.y : leftPrevious.y;
+		// 이전 위치와 현재 위치를 모두 포함하는 Y축 swept bounds 계산
+		const int leftYMin = (std::min)(leftCurrent.y,leftPrevious.y);
 
-		const int rightYMin = (rightCurrent.y < rightPrevious.y) ? rightCurrent.y : rightPrevious.y;
-		const int rightYMax = (rightCurrent.y > rightPrevious.y) ? rightCurrent.y : rightPrevious.y;
+		const int leftYMaxCurrent =leftCurrent.y+ left->GetHeight()- 1;
 
-		// y좌표 기준으로 충돌이 발생할 수 없는 상황 처리.
+		const int leftYMaxPrevious =leftPrevious.y+ left->GetHeight()- 1;
+
+		const int leftYMax =(std::max)(leftYMaxCurrent,leftYMaxPrevious);
+
+		const int rightYMin =(std::min)(rightCurrent.y,rightPrevious.y);
+
+		const int rightYMaxCurrent =rightCurrent.y+ right->GetHeight()- 1;
+
+		const int rightYMaxPrevious =rightPrevious.y+ right->GetHeight()- 1;
+
+		const int rightYMax =(std::max)(rightYMaxCurrent,rightYMaxPrevious);
+
+		// Y축 충돌 여부 검사
 		if (rightYMin > leftYMax)
 		{
 			return false;
