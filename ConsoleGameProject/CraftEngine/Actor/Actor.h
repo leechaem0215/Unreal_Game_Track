@@ -43,6 +43,7 @@ namespace Craft
 		inline bool HasBeganPlay() const { return hasBeganPlay; }
 		inline bool IsActive() const { return isActive && !hasExpired; }
 		inline bool HasExpired() const { return  hasExpired; }
+		void SetVisible(bool visible);
 
 		// 오너십 관련된 getter / setter
 		inline std::shared_ptr<Level> GetOwner() const { return  owner.lock(); }
@@ -80,6 +81,7 @@ namespace Craft
 
 		// 액터 활성화 여부 플래그
 		bool isActive = true;
+		bool isVisible = true;
 
 		// 삭제 요청 여부 플래그
 		bool hasExpired = false;

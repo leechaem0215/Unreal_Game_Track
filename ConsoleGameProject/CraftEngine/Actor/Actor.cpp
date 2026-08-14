@@ -24,12 +24,17 @@ namespace Craft
 	void Actor::Tick(float deltaTime)
 	{
 	}
+	void Actor::SetVisible(bool visible)
+	{
+		isVisible = visible;
+	}
 	void Actor::Draw()
 	{
 		// 비활성 상태이면 종료
 		if (!IsActive()) {
 			return;
 		}
+
 		// 렌더러에 필요한 데이터 제출
 		Renderer::Get().Submit(textSprite.GetImage(), position, color, sortingOrder);
 	}

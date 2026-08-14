@@ -7,4 +7,5 @@
     <BuildDependency Project="CraftEngine/CraftEngine.vcxproj" />
   </Project>
   <Project Path="ShootingGame/ShootingGame.vcxproj" Id="fa23939a-8e48-4d27-a253-405231dd8884" />
+  <Project Path="SoundSystem/SoundSystem.vcxproj" Id="55fe9eb2-01b1-41ef-9bf0-26599de34a04" />
 </Solution>
