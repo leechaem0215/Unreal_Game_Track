@@ -22,6 +22,8 @@ namespace Craft
 
 		// 엔진 설정 로드
 		LoadEngineSetting();
+
+		SetConsoleFontSize(setting.fontWidth,setting.fontHeight);
 		SetConsoleSize(setting.width, setting.height);
 
 		// 입력 객체 생성
@@ -323,6 +325,13 @@ namespace Craft
 			else if (strcmp(key, "height") == 0) {
 				sscanf_s(token, "height = %d", &setting.height);
 			}
+			else if (strcmp(key, "font_width") == 0) {
+				sscanf_s(token, "font_width = %d", &setting.fontWidth);
+			}
+			else if (strcmp(key, "font_height") == 0) {
+				sscanf_s(token, "font_height = %d", &setting.fontHeight);
+			}
+
 
 			// 나머지 문자열 자르기 (개행 문자 기준으로)
 			token = strtok_s(nullptr, "\n", &context);
@@ -330,6 +339,48 @@ namespace Craft
 		// 파일 닫기
 		fclose(file);
 		file = nullptr;
+	}
+
+	void Engine::SetConsoleFontSize(int width, int height)
+	{
+		HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		if (console == INVALID_HANDLE_VALUE) {
+			return;
+		}
+
+		CONSOLE_FONT_INFOEX fontInfo{};
+		fontInfo.cbSize = sizeof(CONSOLE_FONT_INFOEX);
+
+		if (!GetCurrentConsoleFontEx(console, FALSE, &fontInfo)) {
+			return;
+		}
+
+		fontInfo.dwFontSize.X = static_cast<SHORT>(width);
+		fontInfo.dwFontSize.Y = static_cast<SHORT>(height);
+
+
+		CONSOLE_FONT_INFOEX font{};
+		font.cbSize = sizeof(font);
+		font.dwFontSize = { 4, 6 };
+		font.FontFamily = FF_MODERN;
+		font.FontWeight = FW_NORMAL;
+
+		wcscpy_s(
+			font.FaceName,
+			LF_FACESIZE,
+			L"Terminal"
+		);
+
+		const BOOL result =
+			SetCurrentConsoleFontEx(
+				console,
+				FALSE,
+				&font
+			);
+		//wcscpy_s(fontInfo.FaceName,LF_FACESIZE,L"Consolas");
+
+		SetCurrentConsoleFontEx(console,FALSE,&fontInfo);
 	}
 
 	void Engine::SetConsoleSize(int width, int height)

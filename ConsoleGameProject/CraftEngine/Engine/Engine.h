@@ -29,6 +29,11 @@ namespace Craft {
 
 			// 사용할 콘솔 화면 높이.
 			int height = 0;
+
+			// 폰트 크기
+			int fontWidth = 0;
+			int fontHeight = 0;
+
 		};
 	public:
 		Engine();
@@ -117,6 +122,7 @@ namespace Craft {
 		// 엔진 설정 로드 함수.
 		void LoadEngineSetting();
 
+		void SetConsoleFontSize(int width, int height);
 		void SetConsoleSize(int width, int height);
 
 	protected:

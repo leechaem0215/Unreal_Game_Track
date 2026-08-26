@@ -67,7 +67,7 @@ public:
 					current->right = new Node<T>(data);
 					return true;
 				}
-
+				
 				// 비어있지 않으면 하위 트리로 계속 진행
 				current = current->right;
 			}
