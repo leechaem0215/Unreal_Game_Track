@@ -29,6 +29,20 @@ namespace Craft
 		return keyStates[keyCode].isKeyDown;
 	}
 
+	Vector2 Craft::Input::GetDirection(
+		int leftKey,
+		int rightKey,
+		int upKey,
+		int downKey
+	) const
+	{
+		const int horizontal =
+			(GetKey(rightKey) ? 1 : 0) - (GetKey(leftKey) ? 1 : 0);
+		const int vertical =
+			(GetKey(downKey) ? 1 : 0) - (GetKey(upKey) ? 1 : 0);
+		return Vector2(horizontal, vertical);
+	}
+
 	Input& Craft::Input::Get()
 	{
 		// 여기에서 instance는 null 이면 안됨

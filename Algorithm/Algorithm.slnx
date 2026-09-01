@@ -2,8 +2,14 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
+  <Project Path="AStar/AStar.vcxproj" Id="b86f1386-696f-4376-9867-c688fea35370" />
   <Project Path="BinarySearch/BinarySearch.vcxproj" />
   <Project Path="BruteForce/BruteForce.vcxproj" />
+  <Project Path="BubbleSort/BubbleSort.vcxproj" Id="f47627f9-7753-4fa0-a355-9d4b506d0a8a" />
+  <Project Path="HeapSort/HeapSort.vcxproj" Id="2c522d50-59ab-42d1-b218-2856e8733871" />
+  <Project Path="InsertionSort/InsertionSort.vcxproj" Id="3b541d5b-160b-4751-a9c2-61e24427798c" />
+  <Project Path="QuickSort/QuickSort.vcxproj" Id="56eb87b4-680b-4713-b871-5115880bd66a" />
   <Project Path="Random/Random.vcxproj" />
   <Project Path="Recursive/Recursive.vcxproj" />
+  <Project Path="SelectionSort/SelectionSort.vcxproj" Id="d0a2a343-4ba4-4800-b385-89d34ca2a64c" />
 </Solution>

@@ -34,6 +34,14 @@ namespace Craft
 		// 현재 프레임에 입력이 눌리면 반복해서 true를 반환하는 함수
 		bool GetKey(int keyCode) const;
 
+		// 네 방향 키를 동시에 검사해 대각선을 포함한 2D 방향을 반환한다.
+		Vector2 GetDirection(
+			int leftKey,
+			int rightKey,
+			int upKey,
+			int downKey
+		) const;
+
 		// 현재 마우스 포인터의 콘솔 셀 좌표를 반환.
 		const Vector2& GetMousePosition() const { return mousePosition; }
 
