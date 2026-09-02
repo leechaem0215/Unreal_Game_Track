@@ -273,7 +273,6 @@ float AStar::CalculateHeuristic(const Position& current, const Position& goal) c
     // 현재 위치에서 목표 지점까지
     // 추정 예상비용 구함
     // 현재 위치와 목표 위치 사이의 차이 계산
-
     int diffX = std::abs(current.x - goal.x);
     int diffY = std::abs(current.y - goal.y);
 
