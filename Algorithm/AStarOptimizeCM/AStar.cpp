@@ -27,13 +27,14 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
     // 예외처리
     if (!IsValidGrid(grid)) {
         // 유효하지 않으면 빈 배열 반환
-        return std::vector<Position>(); // {}; << 이거도 가능 (STL - initialize_list)
+        return {}; // {}; << 이거도 가능 (STL - initialize_list)
     }
 
     // 시작/목표 위치가 grid 기준에서 문제 없는 위치값인지 확인
     if (!IsInRange(startPosition.x, startPosition.y, grid) || !IsInRange(goalPosition.x, goalPosition.y, grid)) {
         return {};
     }
+
     // 시작/목표 위치가 이동 불가하면 종료
     if (grid[startPosition.y][startPosition.x] == (int)TileType::Wall || grid[goalPosition.y][goalPosition.x] == (int)TileType::Wall) {
         return {};
@@ -41,6 +42,8 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
 
     // 이전 탐색 과정의 시각화 제거 (기존에 방문 처리한 값이 있으면 제거)
     ClearVisualization(grid);
+    width = static_cast<int>(grid[0].size());
+    allocatedNodes.resize(width * width + (grid.size()));
 
     // 탐색시작
     // 시작/목표 노드 생성
@@ -52,7 +55,7 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
     startNode->hCost = CalculateHeuristic(startPosition, goalPosition); // 추정비용
     startNode->fCost = startNode->gCost + startNode->hCost; // 다익스트라 + 그리드 알고리즘에 해당
 
-    openList.emplace_back(startNode);
+    openList.push(startNode);
 
     // 편의를 위해 사전 비용 설정
     const float diagonalCost = 1.41421f;
@@ -64,34 +67,19 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
         { -1, 1, diagonalCost}, {1, 1, diagonalCost},  // 좌하단, 우하단
     }; // 휴리스틱 계산할 때 현재 위치에서 목표지정할 때 방향이 비용으로 지정이 될 거임, 반대면 비용이 커질 수 있음
 
+
+
     // openList가 빌 때까지 탐색 반복
     while (!openList.empty()) {
         // openList에서 fCost가 가장 작은 노드를 선택
-        Node* currentNode = openList[0];
-        for (Node* node:openList) {
-            // 더 작은 비용의 노드 검색
-            if (node->fCost < currentNode->fCost || (node->fCost == currentNode->fCost && node->hCost < currentNode->hCost)) {
-                currentNode = node;
-            }
-        }
+        Node* currentNode = openList.top();
+        openList.pop();
 
-        // 맵이 커지면? 
-        // 작은 노드를 빼왔다.
         // 목표 노드인지 확인
         if (IsDestination(currentNode)) {
-            // 이동 경로 제작 후 변환
             return ConstructPath(currentNode);
         }
 
-        // 목표 노드가 아니면 방문처리를 해야한다.
-        // 현재 노드를 openList에서 제거, 재 방문 방지
-        auto iterator = std::find(openList.begin(), openList.end(), currentNode);
-        // 검색에 성공했는지 확인
-        if (iterator!=openList.end()) {
-            // openaList에서 제거
-            openList.erase(iterator);
-        }
-        
         // 탐색을 마친 노드를 closedList에 추가
         closedList.emplace_back(currentNode);
 
@@ -102,12 +90,13 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
             // 새로운 좌표(위치) = 현재 위치 + 이동방향
             int newX = currentNode->position.x + direction.x; // 위치 + 벡터 = 위치
             int newY = currentNode->position.y + direction.y;
-             
+
+            int idx = NodeMapKey({newX, newY});
             // 예외 처리
             if (!IsInRange(newX, newY, grid)) {
                 continue;
             }
-            
+
             // 새로운 위치가 장애물인지 확인
             if (grid[newY][newX] == (int)TileType::Wall) {
                 continue;
@@ -127,9 +116,15 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
             float newGCost = currentNode->gCost + direction.cost;
 
             // 이미 openList에 있는데 비용면에서 더 나은지 확인
-            Node* openNode = FindOpenNode(newX, newY); // 아직 방문은 안했지만 방문하려고 저장한 노드 
+            Node* openNode = FindOpenNode(Position(newX, newY)); // 아직 방문은 안했지만 방문하려고 저장한 노드 
             if (openNode) {
-                // 비용 비교
+                if (openNode->gCost == 0.0f && openNode->hCost == 0.0f && openNode->fCost == 0.0f) {
+                    openNode->gCost = newGCost;
+                    openNode->hCost = CalculateHeuristic(openNode->position, goalNode->position);
+                    openNode->fCost = openNode->gCost + openNode->hCost;
+                    openNode->parent = currentNode;
+                    openList.push(openNode);
+                }
                 if (newGCost < openNode->gCost) {
                     openNode->gCost = newGCost;
                     openNode->fCost = openNode->gCost + openNode->hCost;
@@ -141,25 +136,25 @@ std::vector<Position> AStar::FindPath(const Position& startPosition, const Posit
 
             // 이웃 노드 생성 및 openList에 추가
             Node* neighborNode = CreateNode(Position(newX, newY), currentNode);
-
+       
             // 새로운 노드의 비용 계산
             neighborNode->gCost = newGCost;
             neighborNode->hCost = CalculateHeuristic(neighborNode->position, goalNode->position);
             neighborNode->fCost = neighborNode->gCost + neighborNode->hCost;
 
             // 새로운 노드를 openList에 추가
-            openList.emplace_back(neighborNode);
+            openList.push(neighborNode);
 
             // 옵션 : 시각화를 위한 처리
-            if (grid[newY][newX]==(int)TileType::Ground) {
+            if (grid[newY][newX] == (int)TileType::Ground) {
                 grid[newY][newX] = (int)TileType::Visited;
             }
 
             // grid 그리기
-            //DisplayGrid(grid);
+            DisplayGrid(grid);
 
             // 스레드 재우기 (애니메이션처럼 단순하게 프레임을 만들기 위해)
-            //DWORD delay = static_cast<DWORD>(0.5f * 1000);
+            //DWORD delay = static_cast<DWORD>(0.5f * 5000);
             //Sleep(delay);
         }
     }
@@ -220,7 +215,7 @@ void AStar::Clear()
         node = nullptr;
     }
     allocatedNodes.clear();
-    openList.clear();
+    openList = decltype(openList){};
     closedList.clear();
 
     startNode = nullptr;
@@ -229,12 +224,12 @@ void AStar::Clear()
 
 Node* AStar::CreateNode(const Position& position, Node* parent)
 {
-    // 노드를 생성하고, allocatedNodes에 추가
-    Node* newNode = new Node(position, parent);
-    allocatedNodes.emplace_back(newNode);
+    int idx = NodeMapKey(position);
+
+    Node* newNode = new Node(position, idx, parent);
+    allocatedNodes[idx] = newNode;
 
     // 생성한 노드 반환
-
     return newNode;
 }
 
@@ -255,37 +250,25 @@ std::vector<Position> AStar::ConstructPath(Node* destination)
     // 루프가 종료되면 path 에는 반대 방향의 경로 정보가 저장됨
     // 따라서 다시 역방향으로 뒤집기가 필요
     std::reverse(path.begin(), path.end());
-    
+
     return path;
 
 }
 
 float AStar::CalculateHeuristic(const Position& current, const Position& goal) const
 {
-    // 옥타일(8방향) 비용계산 방법
-    // 대각선이랑 직선이랑 계산이 다름, 현재 지점에서 목표지점까지 이동하는데 드는 계산이 뭐여
-    // 양수값을 구함 그래서 절대값씌움, // 대각선으로 최대한 이동한 다음 직선 값 구함
-
-    // 대각선 이동 허용시 주의 사항 -> 대각선 형태의 장애물을 뚫고 가지 못하게 막아햐 함.
-    // 이동하려는 방향성분에 장애물이 있으면 못가게 해야함 (x,y에 장애물 있다면..)
-
-
-    // 현재 위치에서 목표 지점까지
-    // 추정 예상비용 구함
-    // 현재 위치와 목표 위치 사이의 차이 계산
     int diffX = std::abs(current.x - goal.x);
     int diffY = std::abs(current.y - goal.y);
 
     // 대각선 거리와 남은 직선 거리 분리
-    int diagonalDistance = std::min(diffX, diffY); // x랑 y중에 더 큰걸 찾음, 대각선으로 2칸이동하면 높이적으로 2칸이동한거랑 같음,. (1,1) (5,3) 일때
-    // x로 4칸 y로 2칸은 6칸 이동해야함 직선으로는 // x먼저 이동시키는게 더 좋음 // 대각선으로 얼마나 이동시키는지 // 
+    int diagonalDistance = std::min(diffX, diffY);
     int straightDistance = std::max(diffX, diffY) - diagonalDistance;
 
     // 대각선 비용
-    const float diagonalCost = 1.41421f; // 대각선길이는 루트 2
+    const float diagonalCost = 1.41421f;
     const float straightCost = 1.0f;
 
-    return diagonalDistance * diagonalCost + straightDistance * straightCost; // 대각선만큼 이동한 비용하고 직선만큼 이동한 비용
+    return diagonalDistance * diagonalCost + straightDistance * straightCost;
 }
 
 bool AStar::IsValidGrid(const std::vector<std::vector<int>>& grid) const
@@ -312,8 +295,8 @@ bool AStar::IsInRange(int x, int y, const std::vector<std::vector<int>>& grid) c
 {                                            // y             //x
     // 2차원 안에 잘 들어간 벡터값인지 검증
     // grid 는 가로 크기는 같다고 가정
-    return x >=0 && x< static_cast<int>(grid[0].size())
-        && y >=0 && y<static_cast<int>(grid.size()); // x: 너비, y: 높이
+    return x >= 0 && x < static_cast<int>(grid[0].size())
+        && y >= 0 && y < static_cast<int>(grid.size()); // x: 너비, y: 높이
 
 }
 
@@ -325,29 +308,22 @@ bool AStar::IsDiagonalBlocked(const Position& current, const Direction& directio
     // 데이터적으로 대각선 어케 표현? 콘솔에서 위면 -1
     // 대각선 방향의 x,y 성분은 모두 0이 아니기 때문
 
-    if(direction.x == 0 || direction.y == 0) {
+    if (direction.x == 0 || direction.y == 0) {
         return false;
     }
 
     // 대각선으로 이동하려는 새로운 위치의 x 성분과 y 성분을 분해
     int sideX = current.x + direction.x;
     int sideY = current.y + direction.y;
-    
+
     // 대각선 이동 성분 위치 중 하나라도 장애물(벽)이 있으면 이동 불가
     return grid[current.y][sideX] == (int)TileType::Wall ||
         grid[sideY][current.x] == (int)TileType::Wall;
 }
 
-Node* AStar::FindOpenNode(int x, int y) const
-{ // 순차 탐색
-    // 같은 좌표의 노드를 openList에서 찾기
-    for (Node* node : openList) {
-        // 좌표 비교
-        if (node -> position == Position(x,y)) {
-            return node;
-        }
-    }
-    return nullptr;
+Node* AStar::FindOpenNode(const Position& position) const
+{
+    return allocatedNodes[NodeMapKey(position)];
 }
 
 bool AStar::IsInClosedList(int x, int y) const // 이미 방문한 노드면 무시
@@ -365,7 +341,7 @@ bool AStar::IsInClosedList(int x, int y) const // 이미 방문한 노드면 무
 bool AStar::IsDestination(const Node* node) const
 {
     // 두 노드 모두 null이 아니고, 두 노드의 위치가 같은지 비교
-    return (node!=nullptr) && (goalNode!=nullptr) && node->position == goalNode->position;
+    return (node != nullptr) && (goalNode != nullptr) && node->position == goalNode->position;
 }
 
 // 시각화할 때 필요한 2 함수
@@ -375,8 +351,8 @@ void AStar::ClearVisualization(std::vector<std::vector<int>>& grid) const
     // 최적의 경로 찾기위해 확인해본 곳들,
     // 탐색후보로 표시해두었다는건, 이동가능하다는 곳
     for (std::vector<int>& row : grid) {
-        for (int& value:row) {
-            if (value ==(int)TileType::Visited) {
+        for (int& value : row) {
+            if (value == (int)TileType::Visited) {
                 value = (int)TileType::Ground;
             }
         }
@@ -392,15 +368,15 @@ void AStar::DisplayGrid(std::vector<std::vector<int>>& grid) const
     SetConsoleCursorPosition(handle, origin);
 
     // 글자색
-    int color = 1 << 0; 
+    int color = 1 << 0;
     int red = FOREGROUND_RED; // bit 연산으로 1<<0 이 red
     int green = FOREGROUND_GREEN;
     int white = red | green | FOREGROUND_BLUE;
 
-    for (int y = 0; y < (int)grid.size(); ++ y) {
+    for (int y = 0; y < (int)grid.size(); ++y) {
         // 타일 값에 따라 글자 색상 및 글자 지정해서 출력
         for (int x = 0; x < (int)grid[y].size(); ++x) {
-            if(grid[y][x] == (int)TileType::Start) {
+            if (grid[y][x] == (int)TileType::Start) {
                 SetConsoleTextAttribute(handle, red);
                 std::cout << "S ";
             }
@@ -424,5 +400,10 @@ void AStar::DisplayGrid(std::vector<std::vector<int>>& grid) const
         // 한 라인 (행) 출력이 마우리 되면 개행 출력
         std::cout << "\n";
     }
+}
+
+int AStar::NodeMapKey(const Position& position) const
+{
+    return position.x * width + position.y;
 }
 

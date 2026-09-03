@@ -2,13 +2,15 @@
 #include <vector>
 #include <Windows.h>
 #include <chrono>
+
 #include "AStar.h"
 
 // 맵에서 시작/목표 위치 찾는 함수
 bool FindStartAndGoalPosition(
 	const std::vector<std::vector<int>>& grid,
 	Position& outStartPosition,
-	Position& outGoalPosition);
+	Position& outGoalPosition
+);
 
 int main()
 {
@@ -50,18 +52,35 @@ int main()
 
 	auto start = std::chrono::steady_clock::now();
 
-	for (int i = 0; i < 10'000; ++i)
-	{
-		// A* 객체를 생성하고 경로를 탐색한다.
-		AStar aStar;
-		std::vector<Position> path = aStar.FindPath(startPosition, goalPosition, grid);
-	}
+	AStar aStar;
+
+	std::vector<Position> path = aStar.FindPath(startPosition, goalPosition, grid);
+	
 	// 시간
 	auto end = std::chrono::steady_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	std::cout << "실행 시간: " << elapsed.count() << "\n";
+	std::cout << "실행 시간dsadas: " << elapsed.count() << "\n";
 
 
+
+	if (!path.empty())
+	{
+		// 탐색한 좌표와 최종 경로를 출력한다.
+		std::cout << "\n경로를 찾았습니다.\n최단 경로:\n";
+
+		for (const Position& position : path)
+		{
+			std::cout << "(" << position.x << ", " << position.y << ") -> ";
+		}
+
+		std::cout << "목표 도착\n";
+		std::cout << "경로를 맵에 표시한 결과:\n";
+		aStar.DisplayGridWithPath(grid, path);
+	}
+	else
+	{
+		std::cout << "경로를 찾지 못했습니다.\n";
+	}
 
 	// 같은 AStar 객체로 FindPath를 다시 호출할 수 있다.
 	// 다음 탐색을 시작하면 이전 탐색 상태가 자동으로 정리된다.
@@ -118,6 +137,7 @@ bool FindStartAndGoalPosition(
 				outGoalPosition = Position(x, y);
 				foundGoal = true;
 			}
+
 		}
 	}
 
