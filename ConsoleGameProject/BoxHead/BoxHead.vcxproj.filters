@@ -24,12 +24,36 @@
     <ClCompile Include="Level\GameLevel.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\Ground.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Zombie.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Wall.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Level\GameLevel.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Ground.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Player.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Zombie.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Wall.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
