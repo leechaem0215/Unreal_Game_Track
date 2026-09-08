@@ -1,6 +1,7 @@
 ﻿#include "ScreenBuffer.h"
 #include <cassert>
 #include <iostream>
+#include <system_error>
 
 namespace Craft 
 {
@@ -20,20 +21,23 @@ namespace Craft
 		// 값 확인 (어서트)
 		assert(buffer != INVALID_HANDLE_VALUE);
 
-		// 화면 창 크기 설정
-		SMALL_RECT rect = {};
-		rect.Top = 0;
-		rect.Left = 0;
-		rect.Right = static_cast<short>(size.x - 1);
-		rect.Bottom = static_cast<short>(size.y - 1);
-		BOOL result = SetConsoleWindowInfo(buffer, TRUE, &rect);
-
-		// 결과 확인
-		assert(result == TRUE);
-		
-		// 화면 버퍼 크기 설정
-		result = SetConsoleScreenBufferSize(buffer, size);
-		assert(result == TRUE);
+        // Both render buffers use the font configured on the original console.
+        CONSOLE_FONT_INFOEX font{};
+        font.cbSize = sizeof(font);
+        const SMALL_RECT temporary = {0, 0, 0, 0};
+        const SMALL_RECT rect = {0, 0, static_cast<SHORT>(size.x - 1), static_cast<SHORT>(size.y - 1)};
+        if (!GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &font)
+            || !SetCurrentConsoleFontEx(buffer, FALSE, &font)
+            || !SetConsoleWindowInfo(buffer, TRUE, &temporary)
+            || !SetConsoleScreenBufferSize(buffer, size)
+            || !SetConsoleWindowInfo(buffer, TRUE, &rect))
+        {
+            const DWORD error = GetLastError();
+            CloseHandle(buffer);
+            buffer = INVALID_HANDLE_VALUE;
+            throw std::system_error(error, std::system_category(), "Configure render screen buffer");
+        }
+        BOOL result = TRUE;
 
 		// 직접 만든 콘솔의 커서 끄기
 		CONSOLE_CURSOR_INFO info;

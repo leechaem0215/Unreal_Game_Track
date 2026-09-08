@@ -3,11 +3,14 @@
 #include <Input/Input.h>
 #include <Render/Renderer.h>
 #include <Physics/CollisionSystem.h>
-//#include "Sound.h"
+#include "Sound.h"
 
 #include <iostream>
 #include <Windows.h>
 #include <cassert>
+#include <stdexcept>
+#include <system_error>
+#include <climits>
 
 namespace Craft 
 {
@@ -23,7 +26,7 @@ namespace Craft
 		// 엔진 설정 로드
 		LoadEngineSetting();
 
-		SetConsoleFontSize(setting.fontWidth,setting.fontHeight);
+		SetConsoleFontSize(setting.fontWidth, setting.fontHeight);
 		SetConsoleSize(setting.width, setting.height);
 
 		// 입력 객체 생성
@@ -38,7 +41,7 @@ namespace Craft
 		collisionSystem = std::make_unique<CollisionSystem>();
 
 		// 사운드 시스템 객체 생성
-		//sound = std::make_unique<Sound>();
+		sound = std::make_unique<Sound>();
 	}
 
 	Engine::~Engine()
@@ -152,7 +155,7 @@ namespace Craft
 	
 	}
 
-	/*
+	
 	void Engine::PlayOneShot(const std::string& filename)
 	{
 		if (!sound) 
@@ -160,7 +163,7 @@ namespace Craft
 			return;
 		}
 		// 사운드 시스템 함수 호출
-		sound->PlayOneShot(std::string("../Asset/Sound/") + filename);
+		sound->PlayOneShot(std::string("../Assets/Sound/") + filename);
 	}
 
 	void Engine::PlayBackgroundMusic(const std::string& filename)
@@ -170,7 +173,7 @@ namespace Craft
 			return;
 		}
 		// 사운드 시스템 함수 호출
-		sound->PlayBackgroundMusic(std::string("../Asset/Sound/") + filename);
+		sound->PlayBackgroundMusic(std::string("../Assets/Sound/") + filename);
 	}
 
 	void Engine::StopBackgroundMusic()
@@ -180,7 +183,7 @@ namespace Craft
 			return;
 		}
 		sound->StopBackgroundMusic();
-	}*/
+	}
 
 	Engine& Engine::Get()
 	{
@@ -341,94 +344,35 @@ namespace Craft
 		file = nullptr;
 	}
 
-	void Engine::SetConsoleFontSize(int width, int height)
-	{
-		HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    void Engine::SetConsoleFontSize(int width, int height)
+    {
+        if (width < 0 || height <= 0 || width > SHRT_MAX || height > SHRT_MAX)
+            throw std::runtime_error("Invalid font_width/font_height in Config/Setting.txt");
+        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_FONT_INFOEX fontInfo{};
+        fontInfo.cbSize = sizeof(fontInfo);
+        if (!GetCurrentConsoleFontEx(console, FALSE, &fontInfo))
+            throw std::system_error(GetLastError(), std::system_category(), "GetCurrentConsoleFontEx");
+        fontInfo.dwFontSize = {static_cast<SHORT>(width), static_cast<SHORT>(height)};
+        if (!SetCurrentConsoleFontEx(console, FALSE, &fontInfo))
+            throw std::system_error(GetLastError(), std::system_category(), "SetCurrentConsoleFontEx");
+    }
 
-		if (console == INVALID_HANDLE_VALUE) {
-			return;
-		}
-
-		CONSOLE_FONT_INFOEX fontInfo{};
-		fontInfo.cbSize = sizeof(CONSOLE_FONT_INFOEX);
-
-		if (!GetCurrentConsoleFontEx(console, FALSE, &fontInfo)) {
-			return;
-		}
-
-		fontInfo.dwFontSize.X = static_cast<SHORT>(width);
-		fontInfo.dwFontSize.Y = static_cast<SHORT>(height);
-
-
-		CONSOLE_FONT_INFOEX font{};
-		font.cbSize = sizeof(font);
-		font.dwFontSize = { 4, 6 };
-		font.FontFamily = FF_MODERN;
-		font.FontWeight = FW_NORMAL;
-
-		wcscpy_s(
-			font.FaceName,
-			LF_FACESIZE,
-			L"Terminal"
-		);
-
-		const BOOL result =
-			SetCurrentConsoleFontEx(
-				console,
-				FALSE,
-				&font
-			);
-		//wcscpy_s(fontInfo.FaceName,LF_FACESIZE,L"Consolas");
-
-		SetCurrentConsoleFontEx(console,FALSE,&fontInfo);
-	}
-
-	void Engine::SetConsoleSize(int width, int height)
-	{
-		HANDLE console =
-			GetStdHandle(STD_OUTPUT_HANDLE);
-
-		// 콘솔 창 영역
-		SMALL_RECT windowRect = {};
-		windowRect.Left = 0;
-		windowRect.Top = 0;
-		windowRect.Right = width - 1;
-		windowRect.Bottom = height - 1;
-
-		// 콘솔 화면 버퍼
-		COORD bufferSize = {};
-		bufferSize.X = width;
-		bufferSize.Y = height;
-
-		// 현재 창이 더 클 수도 있으므로 우선 작게 축소
-		SMALL_RECT temporaryRect = {};
-		temporaryRect.Left = 0;
-		temporaryRect.Top = 0;
-		temporaryRect.Right = 1;
-		temporaryRect.Bottom = 1;
-
-		SetConsoleWindowInfo(
-			console,
-			TRUE,
-			&temporaryRect
-		);
-
-		// 버퍼 크기 설정
-		BOOL bufferResult =
-			SetConsoleScreenBufferSize(
-				console,
-				bufferSize
-			);
-
-		// 실제 창 크기 설정
-		BOOL windowResult =
-			SetConsoleWindowInfo(
-				console,
-				TRUE,
-				&windowRect
-			);
-
-		assert(bufferResult == TRUE);
-		assert(windowResult == TRUE);
-	}
+    void Engine::SetConsoleSize(int width, int height)
+    {
+        if (width <= 0 || height <= 0 || width > SHRT_MAX || height > SHRT_MAX)
+            throw std::runtime_error("Invalid width/height in Config/Setting.txt");
+        HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+        const COORD largest = GetLargestConsoleWindowSize(console);
+        if (width > largest.X || height > largest.Y)
+            throw std::runtime_error("Console does not fit the display. Reduce width/height or font size in Config/Setting.txt.");
+        // Window dimensions are character cells. Never pass them to MoveWindow (pixels).
+        const SMALL_RECT temporary = {0, 0, 0, 0};
+        const COORD size = {static_cast<SHORT>(width), static_cast<SHORT>(height)};
+        const SMALL_RECT window = {0, 0, static_cast<SHORT>(width - 1), static_cast<SHORT>(height - 1)};
+        if (!SetConsoleWindowInfo(console, TRUE, &temporary)
+            || !SetConsoleScreenBufferSize(console, size)
+            || !SetConsoleWindowInfo(console, TRUE, &window))
+            throw std::system_error(GetLastError(), std::system_category(), "SetConsoleSize");
+    }
 }
