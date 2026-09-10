@@ -64,8 +64,8 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SoundSystem.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Lib\$(Configuration)\;</AdditionalLibraryDirectories>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt);</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)Lib\SoundSystem\$(Configuration)\;..\Lib\$(Configuration)\;</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -95,8 +95,8 @@ xcopy *.h $(SolutionDir)\Includes\ /e /y /i</Command>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SoundSystem.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Lib\$(Configuration)\;</AdditionalLibraryDirectories>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt);</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)Lib\SoundSystem\$(Configuration)\;..\Lib\$(Configuration)\;</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -138,6 +138,12 @@ xcopy *.h $(SolutionDir)\Includes\ /e /y /i</Command>
     <ClInclude Include="Render\TextSprite.h" />
     <ClInclude Include="Util\ResourceManager.h" />
     <ClInclude Include="Util\Util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ConsoleGameProject\SoundSystem\SoundSystem.vcxproj">
+      <Project>{be8b9795-3744-4344-b05a-bd74d725c1f5}</Project>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

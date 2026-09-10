@@ -37,6 +37,7 @@ namespace Craft {
 		};
 	public:
 		Engine();
+		Engine(int width, int height);
 		virtual ~Engine();
 
 		// 엔진 실행 함수

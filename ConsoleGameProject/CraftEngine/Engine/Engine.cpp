@@ -17,14 +17,24 @@ namespace Craft
 	// 전역 변수 초기화
 	Engine* Engine::instance = nullptr;
 
-	Engine::Engine()
+	Engine::Engine() : Engine(0, 0) {}
+
+	Engine::Engine(int width, int height)
 	{
 		// instance 초기화
 		assert(!instance && "anoter instance is not null");
 		instance = this;
 
 		// 엔진 설정 로드
-		LoadEngineSetting();
+        LoadEngineSetting();
+        // (0, 0) keeps the configured size for existing Engine() callers.
+        if (width != 0 || height != 0)
+        {
+            if (width <= 0 || height <= 0 || width > SHRT_MAX || height > SHRT_MAX)
+                throw std::invalid_argument("Engine width and height must be positive console dimensions");
+            setting.width = width;
+            setting.height = height;
+        }
 
 		SetConsoleFontSize(setting.fontWidth, setting.fontHeight);
 		SetConsoleSize(setting.width, setting.height);
