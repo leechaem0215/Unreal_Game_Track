@@ -9,6 +9,9 @@ Intermediate/
 Saved/
 .vs/
 
+*.slx
+*.slnx
+
 # Visual Studio
 *.VC.db
 *.VC.opendb
